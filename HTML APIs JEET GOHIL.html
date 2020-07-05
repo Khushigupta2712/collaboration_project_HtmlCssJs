@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoLocation</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="container">
+    
+    <!-- GEOLOCATION -->
+    
+    <div class="location">
+      <h1>GeoLocation</h1>
+      <button onclick="getLocation()" class="btn btn-primary">
+        GET LOCATION
+      </button>
+      <h3 id="location"></h3>
+      <div id="googleMap" style="width:100%;height:400px;"></div>
+    </div>
+   
+   
+   
+   
+   <!-- LOCALSTORAGE -->
+   <!-- Local storage: This stores data with no expiration date. The data in local storage would persist even when the user’s 
+        browser is closed and reopened. -->
+
+
+    <hr />
+    <div class="localstorage">
+      <h1>LocalStorage</h1>
+      <textarea name="name" cols= id="name" rows="2"></textarea>
+      <p id="namePrint">Empty</p>
+      <button onclick="storeName()" class="btn btn-primary">Store Name</button>
+    </div>
+    <hr />
+
+
+
+    <!-- SESSION STORAGE -->
+    <!-- Session storage: This is similar to local storage, except that it stores data for one session only. 
+         Once the user’s browser is closed, that session would be lost and the persisted data will be deleted from the browser -->
+
+    <div class="sessionstorage">
+      <h1>SessionStorage</h1>
+      <button onclick="addNum()" class="btn btn-primary">+</button>
+      <p id="numberPrint">0</p>
+    </div>
+    <hr />
+
+
+
+
+
+<!-- COOKIE STORAGE -->
+
+
+    <div class="cookiestorage">
+      <h1>Cookie Storage</h1>
+      <button onclick="addCookie()" class="btn btn-primary">
+        Add Todays date to cookie storage
+      </button>
+      <button onclick="displayCookie()" class="btn btn-outline-info">
+        Display Cookie
+      </button>
+      <p id="cookiePrint"></p>
+    </div>
+  </body>
+  <script>
+    sessionStorage.number = 0;
+    var value = localStorage.getItem("name");
+    var y = document.getElementById("namePrint");
+    y.innerHTML = value;
+    var x = document.getElementById("location");
+    document.getElementById('googleMap').style.display="none";
+    
+    
+    function getLocation() {
+      if (!navigator.geolocation) {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      } else {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }
+    }
+    function showPosition(position) {
+      document.getElementById('googleMap').style.display="block";
+      x.innerHTML =
+        "Latitude: " +
+        position.coords.latitude +
+        "<br>Longitude: " +
+        position.coords.longitude;
+        // Our Location
+        var delta = {lat: position.coords.latitude, lng: position.coords.longitude};
+        // The map, centered at Our location
+        var map = new google.maps.Map(
+            document.getElementById('googleMap'), {zoom: 14, center: delta});
+        // The marker, positioned at our location
+        var marker = new google.maps.Marker({position: delta, map: map});
+    }
+
+    function storeName() {
+      var value = document.getElementById("name").value;
+      localStorage.setItem("name", value);
+      document.getElementById("name").value = "";
+      getName();
+    }
+
+    function getName() {
+      var value = localStorage.getItem("name");
+      var x = document.getElementById("namePrint");
+      x.innerHTML = value;
+    }
+
+    function addNum() {
+      sessionStorage.number = Number(sessionStorage.number) + 1;
+      var x = document.getElementById("numberPrint");
+      x.innerHTML = sessionStorage.number;
+    }
+
+    function addCookie() {
+      var date = new Date();
+      document.cookie = `Date = ${date}; expires = Thu, 18 Dec 2020 12:00:00 UTC`;
+    }
+
+    function displayCookie(){
+      alert(document.cookie);
+    }
+
+    
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkiJovztv8oIwsc1cpyJhQVE-opqmvYhE"></script>
+
+  </script>
+</html>
+
